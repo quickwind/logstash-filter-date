@@ -18,8 +18,8 @@
 
 package org.logstash.filters.parser;
 
-import org.joda.time.Instant;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 public class UnixEpochParser implements TimestampParser {
   private static long MAX_EPOCH_SECONDS = (long)Integer.MAX_VALUE;
@@ -37,17 +37,17 @@ public class UnixEpochParser implements TimestampParser {
       long subseconds = Long.parseLong(value.substring(dot+1, dot+1+subdigits));
       switch (subdigits) {
         case 0:
-          return new Instant(millis);
+          return Instant.ofEpochMilli(millis);
         case 1:
-          return new Instant(millis + subseconds * 100);
+          return Instant.ofEpochMilli(millis + subseconds * 100);
         case 2:
-          return new Instant(millis + subseconds * 10);
+          return Instant.ofEpochMilli(millis + subseconds * 10);
         case 3:
         default:
-          return new Instant(millis + subseconds);
+          return Instant.ofEpochMilli(millis + subseconds);
       }
     } else {
-      return new Instant(coerceToMillis(Long.parseLong(value)));
+      return Instant.ofEpochMilli(coerceToMillis(Long.parseLong(value)));
     }
   }
 
@@ -58,7 +58,7 @@ public class UnixEpochParser implements TimestampParser {
 
   @Override
   public Instant parse(Long value) {
-    return new Instant(coerceToMillis(value));
+    return Instant.ofEpochMilli(coerceToMillis(value));
   }
 
   @Override
@@ -66,7 +66,7 @@ public class UnixEpochParser implements TimestampParser {
     if (value.longValue() > MAX_EPOCH_SECONDS) {
       throw new IllegalArgumentException("Cannot parse date for value larger than UNIX epoch maximum seconds");
     }
-    return new Instant((long)(value * 1000));
+    return Instant.ofEpochMilli((long)(value * 1000));
   }
 
   private long coerceToMillis(long value) {
@@ -81,6 +81,6 @@ public class UnixEpochParser implements TimestampParser {
     if (value.longValue() > MAX_EPOCH_SECONDS) {
       throw new IllegalArgumentException("Cannot parse date for value larger than UNIX epoch maximum seconds");
     }
-    return new Instant(value.scaleByPowerOfTen(3).longValue());
+    return Instant.ofEpochMilli(value.scaleByPowerOfTen(3).longValue());
   }
 }

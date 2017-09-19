@@ -19,7 +19,8 @@
 
 package org.logstash.filters;
 
-import org.joda.time.Instant;
+import java.time.Instant;
+
 import org.logstash.Event;
 
 interface ResultSetter {

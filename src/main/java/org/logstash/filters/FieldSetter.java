@@ -19,7 +19,8 @@
 
 package org.logstash.filters;
 
-import org.joda.time.Instant;
+import java.time.Instant;
+
 import org.logstash.Event;
 import org.logstash.Timestamp;
 
@@ -31,6 +32,6 @@ class FieldSetter implements ResultSetter {
   }
 
   public void set(Event event, Instant instant) {
-    event.setField(this.target, new Timestamp(instant.getMillis()));
+    event.setField(this.target, new Timestamp(instant.toEpochMilli()));
   }
 }

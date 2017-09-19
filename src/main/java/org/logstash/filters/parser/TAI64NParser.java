@@ -20,7 +20,7 @@
 package org.logstash.filters.parser;
 
 import java.math.BigDecimal;
-import org.joda.time.Instant;
+import java.time.Instant;
 
 public class TAI64NParser implements TimestampParser {
   @Override
@@ -40,7 +40,7 @@ public class TAI64NParser implements TimestampParser {
     // XXX: Leap seconds aren't this simple. We need to find out what times each leap second was introduced.
     secondsSinceEpoch -= 10;
 
-    return new Instant(secondsSinceEpoch * 1000 + (nanoseconds / 1_000_000));
+    return Instant.ofEpochSecond(secondsSinceEpoch, nanoseconds);
   }
 
   @Override

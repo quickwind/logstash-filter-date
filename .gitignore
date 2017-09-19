@@ -7,8 +7,14 @@ vendor
 build
 .gradle
 
+# Eclipse
+.classpath
+.project
+.settings
+
 # Intellij
 .idea
 *.iml
 
 gradle.properties
+/bin/

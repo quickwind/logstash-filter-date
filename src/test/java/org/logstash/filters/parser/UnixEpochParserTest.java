@@ -18,13 +18,13 @@
  */
 
 package org.logstash.filters.parser;
-import org.joda.time.Instant;
 import org.junit.Test;
 import java.util.Collection;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -44,7 +44,7 @@ public class UnixEpochParserTest {
     // Create a random number of values to test
     return LongStream.range(1, count)
             .map(i -> new Long(Math.abs(random.nextLong() % Integer.MAX_VALUE)))
-            .mapToObj(i -> new Object[] { new Instant(i), String.format("%d.%03d", i / 1000, i % 1000) })
+            .mapToObj(i -> new Object[] { Instant.ofEpochMilli(i), String.format("%d.%03d", i / 1000, i % 1000) })
             .collect(Collectors.toList());
   }
 

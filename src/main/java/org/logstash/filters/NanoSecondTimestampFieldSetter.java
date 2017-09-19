@@ -17,23 +17,25 @@
  * under the License.
  */
 
-package org.logstash.filters.parser;
+package org.logstash.filters;
 
-import org.joda.time.Instant;
-import org.junit.Test;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
-import static org.junit.Assert.assertEquals;
+import org.logstash.Event;
 
-public class JodaParserTest {
-  @Test(expected = IllegalArgumentException.class)
-  public void emptyShouldFail() {
-    new TimestampParserFactory().makeParser("", "en", "UTC");
-  }
+class NanoSecondTimestampFieldSetter implements ResultSetter {
+    private String target;
 
-  @Test
-  public void onePattern() {
-    JodaParser parser = new JodaParser("YYYY", null, null);
-    Instant instant = parser.parse("2016");
-    assertEquals(2016, instant.toDateTime().getYear());
-  }
+    NanoSecondTimestampFieldSetter(String target) {
+        this.target = target;
+    }
+
+    public void set(Event event, Instant instant) {
+        event.setField(this.target, DateTimeFormatter
+                .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'")
+                .format(ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"))));
+    }
 }

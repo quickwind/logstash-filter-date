@@ -19,12 +19,10 @@
 
 package org.logstash.filters.parser;
 
-import org.joda.time.DateTimeZone;
-
+import java.time.ZoneId;
 import java.util.Locale;
 
 public class TimestampParserFactory {
-  private DateTimeZone timezone;
 
   private static final String ISO8601 = "ISO8601";
   private static final String UNIX = "UNIX";
@@ -42,7 +40,7 @@ public class TimestampParserFactory {
     String tz = zone;
 
     if (tz == null) {
-      tz = DateTimeZone.getDefault().getID();
+      tz = ZoneId.systemDefault().getId();
     } else if (zone.contains("%{")) {
       tz = null;
     }
@@ -57,7 +55,7 @@ public class TimestampParserFactory {
       case UNIX_MS: // Unix epoch in milliseconds
         return new UnixMillisEpochParser();
       default:
-        return new JodaParser(pattern, locale, tz);
+        return new Jsr310Parser(pattern, locale, tz);
     }
   }
 

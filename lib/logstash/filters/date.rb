@@ -146,6 +146,9 @@ class LogStash::Filters::Date < LogStash::Filters::Base
   # default to updating the `@timestamp` field of the event.
   config :target, :validate => :string, :default => LogStash::Event::TIMESTAMP
 
+  # Store the matching timestamp into the given target field with nano second precision. 
+  config :nano_sec_target, :validate => :string
+
   # Append values to the `tags` field when there has been no
   # successful match
   config :tag_on_failure, :validate => :array, :default => ["_dateparsefailure"]
@@ -179,7 +182,7 @@ class LogStash::Filters::Date < LogStash::Filters::Base
       metric.increment(:failures)
     end
 
-    @datefilter = org.logstash.filters.DateFilter.new(source, @target, @tag_on_failure, success_block, failure_block)
+    @datefilter = org.logstash.filters.DateFilter.new(source, @target, @nano_sec_target, @tag_on_failure, success_block, failure_block)
 
     @match[1..-1].map do |format|
       @datefilter.accept_filter_config(format, @locale, @timezone)
