@@ -131,7 +131,7 @@ public class DateFilter {
                     this.nanoSecFieldSetter.set(event, instant);
                 }
                 return ParseExecutionResult.SUCCESS;
-            } catch (IllegalArgumentException | IOException e) {
+            } catch (Exception e) {
                 // do nothing, try next ParserExecutor
             }
         }
